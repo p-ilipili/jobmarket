@@ -1,2 +1,2 @@
-# ds_jobmarket
+# jobmarket
 DataScientest - Data Engineering jobmarket project
