@@ -7,27 +7,66 @@ Sources :
 Attributes : (this list needs to be cleaned up, or other attributes may be added)
 
     - Job ID from source - Used for not inserting same data twice
-            Adzuna      : OK        "id"
+        Global identifier label : job_id
+        
+            Adzuna      : .id
             The Muse    : tbd
-            LinkedIn    : OK
+            LinkedIn    : tbd
             Indeed      : tbd
         
     - Job Title - Specific role or position.
+        Global identifier label : job_title
+
+            Adzuna      : .title
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
 
     - Job Description - Full details about job responsibilities and requirements.
+        Global identifier label : job_desc
+
+            Adzuna      : Get description from redirect_url with BeautifulSoup
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
 
     - Category - Industry or field of the job (e.g., IT, Finance, Healthcare).
+        Global identifier label : category
+        # Q: only one category per job?
+        # Q: the industry is different from the category -> IT technician in Finance or in Healthcare is different
+        # -> different skillsets would be needed
+
+            Adzuna      : .category.label
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
 
     - Skills/Requirements - Specific skills or technologies needed.
+        Global identifier label : skill_name
+
+        # We may need a separate table with the skills, in the job document, we'll have a list of skills with skill_ids
+        # or we can list the skills directly.  I don't know what is better?
+        # in a relational DB, we need another table with job_id and skill_id as primary keys
+
+            Adzuna      : tbd
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
 
     - Company Name - Name of the hiring company.
+        Global identifier label : company_name
+
+            Adzuna      : .company.display_name
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
     
     - Contract Type - Employment type (e.g., full-time, part-time, contract).
     
     - Location - City, state, and country details; essential for filtering by geography.
             Country and city only - this data should be available on all sources. Region?
 
-            Adzuna      : OK (region available if needed)
+            Adzuna      : tbd
             The Muse    : tbd
             LinkedIn    : tbd
             Indeed      : tbd
