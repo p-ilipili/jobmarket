@@ -1,0 +1,44 @@
+Sources :
+
+    - https://api.adzuna.com/v1/api/jobs
+    - https://www.themuse.com/api/public/jobs
+
+
+Attributes : (this list needs to be cleaned up, or other attributes may be added)
+
+    - Job ID from source - Used for not inserting same data twice
+            Adzuna      : OK        "id"
+            The Muse    : tbd
+            LinkedIn    : OK
+            Indeed      : tbd
+        
+    - Job Title - Specific role or position.
+
+    - Job Description - Full details about job responsibilities and requirements.
+
+    - Category - Industry or field of the job (e.g., IT, Finance, Healthcare).
+
+    - Skills/Requirements - Specific skills or technologies needed.
+
+    - Company Name - Name of the hiring company.
+    
+    - Contract Type - Employment type (e.g., full-time, part-time, contract).
+    
+    - Location - City, state, and country details; essential for filtering by geography.
+            Country and city only - this data should be available on all sources. Region?
+
+            Adzuna      : OK (region available if needed)
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
+
+
+    - Remote/Hybrid - If applicable, specify if the job is remote, hybrid, or onsite. - Remote only but depending on quantity of data
+
+    - Salary Range - Min and max salary offered (important for filtering by compensation).
+
+    - Predicted Salary Indicator - Whether the salary is estimated or exact.
+
+    - Creation Date - Date the job was posted, for relevance filtering.
+
+
