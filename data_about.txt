@@ -47,6 +47,10 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
         # We may need a separate table with the skills, in the job document, we'll have a list of skills with skill_ids
         # or we can list the skills directly.  I don't know what is better?
         # in a relational DB, we need another table with job_id and skill_id as primary keys
+        #
+        # How do we extract skills? One way would be to have a file full of words related to skills. 
+        # This could be like a 1000 words or more. 
+        # And then check in the description if those words are present.  To discuss with Antoine.
 
             Adzuna      : tbd
             The Muse    : tbd
@@ -62,22 +66,52 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             Indeed      : tbd
     
     - Contract Type - Employment type (e.g., full-time, part-time, contract).
+            Global identifier label : contract_type
+
+            Adzuna      : .contract_type
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
     
     - Location - City, state, and country details; essential for filtering by geography.
-            Country and city only - this data should be available on all sources. Region?
+            # Country and city only? - this data should be available on all sources. Region?
+            Global identifier label : location
 
-            Adzuna      : tbd
+            Adzuna      : .location.area
             The Muse    : tbd
             LinkedIn    : tbd
             Indeed      : tbd
 
 
     - Remote/Hybrid - If applicable, specify if the job is remote, hybrid, or onsite. - Remote only but depending on quantity of data
+            Global identifier label : location_type  (other propositions?) This info must possibly be extracted from elsewhere.
+
+            Adzuna      : tbd
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd            
 
     - Salary Range - Min and max salary offered (important for filtering by compensation).
+            Global identifier label : sal_min & sal_max & sal
+
+            Adzuna      : .salary_max, .salary_min, sal = null
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
 
     - Predicted Salary Indicator - Whether the salary is estimated or exact.
+        Global identifier label : sal_predicted (boolean)
+
+            Adzuna      : .salary_is_predicted
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
 
     - Creation Date - Date the job was posted, for relevance filtering.
+            Global identifier label : job_date  (other propositions?)
 
+            Adzuna      : .created
+            The Muse    : tbd
+            LinkedIn    : tbd
+            Indeed      : tbd
 
