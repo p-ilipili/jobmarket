@@ -10,7 +10,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
         Global identifier label : job_id
         
             Adzuna      : .id
-            The Muse    : tbd
+            The Muse    : .id
             LinkedIn    : tbd
             Indeed      : tbd
         
@@ -18,15 +18,15 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
         Global identifier label : job_title
 
             Adzuna      : .title
-            The Muse    : tbd
+            The Muse    : .name
             LinkedIn    : tbd
             Indeed      : tbd
 
     - Job Description - Full details about job responsibilities and requirements.
         Global identifier label : job_desc
 
-            Adzuna      : Get description from redirect_url with BeautifulSoup
-            The Muse    : tbd
+            Adzuna      : Get description from .redirect_url with BeautifulSoup
+            The Muse    : Get description from .refs.landing_page with BeautifulSoup
             LinkedIn    : tbd
             Indeed      : tbd
 
@@ -37,7 +37,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
         # -> different skillsets would be needed
 
             Adzuna      : .category.label
-            The Muse    : tbd
+            The Muse    : .categories[].name
             LinkedIn    : tbd
             Indeed      : tbd
 
@@ -61,7 +61,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
         Global identifier label : company_name
 
             Adzuna      : .company.display_name
-            The Muse    : tbd
+            The Muse    : .company.name
             LinkedIn    : tbd
             Indeed      : tbd
     
@@ -78,7 +78,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             Global identifier label : location
 
             Adzuna      : .location.area
-            The Muse    : tbd
+            The Muse    : .locations[].name
             LinkedIn    : tbd
             Indeed      : tbd
 
@@ -103,7 +103,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
         Global identifier label : sal_predicted (boolean)
 
             Adzuna      : .salary_is_predicted
-            The Muse    : tbd
+            The Muse    : N/A
             LinkedIn    : tbd
             Indeed      : tbd
 
@@ -111,7 +111,15 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             Global identifier label : job_date  (other propositions?)
 
             Adzuna      : .created
-            The Muse    : tbd
+            The Muse    : .publication_date
+            LinkedIn    : tbd
+            Indeed      : tbd
+
+    - Level - Senior, Mid, Junior, ... ? 
+            Global identifier label : job_level  (other propositions?)
+
+            Adzuna      : N/A
+            The Muse    : .levels[].short_name
             LinkedIn    : tbd
             Indeed      : tbd
 
