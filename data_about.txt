@@ -11,7 +11,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
         
             Adzuna      : .id
             The Muse    : .id
-            LinkedIn    : tbd
             Indeed      : tbd
         
     - Job Title - Specific role or position.
@@ -19,7 +18,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : .title
             The Muse    : .name
-            LinkedIn    : tbd
             Indeed      : tbd
 
     - Job Description - Full details about job responsibilities and requirements.
@@ -27,7 +25,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : Get description from .redirect_url with BeautifulSoup
             The Muse    : Get description from .refs.landing_page with BeautifulSoup
-            LinkedIn    : tbd
             Indeed      : tbd
 
     - Category - Industry or field of the job (e.g., IT, Finance, Healthcare).
@@ -38,7 +35,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : .category.label
             The Muse    : .categories[].name
-            LinkedIn    : tbd
             Indeed      : tbd
 
     - Skills/Requirements - Specific skills or technologies needed.
@@ -54,7 +50,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : tbd
             The Muse    : tbd
-            LinkedIn    : tbd
             Indeed      : tbd
 
     - Company Name - Name of the hiring company.
@@ -62,7 +57,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : .company.display_name
             The Muse    : .company.name
-            LinkedIn    : tbd
             Indeed      : tbd
     
     - Contract Type - Employment type (e.g., full-time, part-time, contract).
@@ -70,7 +64,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : .contract_type
             The Muse    : tbd
-            LinkedIn    : tbd
             Indeed      : tbd
     
     - Location - City, state, and country details; essential for filtering by geography.
@@ -79,24 +72,21 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : .location.area
             The Muse    : .locations[].name
-            LinkedIn    : tbd
             Indeed      : tbd
 
 
     - Remote/Hybrid - If applicable, specify if the job is remote, hybrid, or onsite. - Remote only but depending on quantity of data
-            Global identifier label : location_type  (other propositions?) This info must possibly be extracted from elsewhere.
+            Global identifier label : remote
 
             Adzuna      : tbd
-            The Muse    : tbd
-            LinkedIn    : tbd
+            The Muse    : Created upon checking location.name. 0: onsite ; 1: remote; 2: hybrid
             Indeed      : tbd            
 
     - Salary Range - Min and max salary offered (important for filtering by compensation).
             Global identifier label : sal_min & sal_max & sal
 
             Adzuna      : .salary_max, .salary_min, sal = null
-            The Muse    : tbd
-            LinkedIn    : tbd
+            The Muse    : N/A
             Indeed      : tbd
 
     - Predicted Salary Indicator - Whether the salary is estimated or exact.
@@ -104,7 +94,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : .salary_is_predicted
             The Muse    : N/A
-            LinkedIn    : tbd
             Indeed      : tbd
 
     - Creation Date - Date the job was posted, for relevance filtering.
@@ -112,7 +101,6 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : .created
             The Muse    : .publication_date
-            LinkedIn    : tbd
             Indeed      : tbd
 
     - Level - Senior, Mid, Junior, ... ? 
@@ -120,6 +108,5 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
             Adzuna      : N/A
             The Muse    : .levels[].short_name
-            LinkedIn    : tbd
             Indeed      : tbd
 
