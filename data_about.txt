@@ -38,7 +38,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             Indeed      : tbd
 
     - Skills/Requirements - Specific skills or technologies needed.
-        Global identifier label : skill_name
+        Global identifier label : skill_name [list]
 
         # We may need a separate table with the skills, in the job document, we'll have a list of skills with skill_ids
         # or we can list the skills directly.  I don't know what is better?
@@ -76,7 +76,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
 
 
     - Remote/Hybrid - If applicable, specify if the job is remote, hybrid, or onsite.
-            Global identifier label : remote
+            Global identifier label : remote   list of values  [0,1,2] or [onsite,remote,hybrid]
 
             Adzuna      : N/A -> null
             The Muse    : Created upon checking location.name. 0: onsite ; 1: remote; 2: hybrid
