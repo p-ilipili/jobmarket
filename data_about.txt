@@ -75,12 +75,15 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             Indeed      : tbd
 
 
-    - Remote/Hybrid - If applicable, specify if the job is remote, hybrid, or onsite. - Remote only but depending on quantity of data
+    - Remote/Hybrid - If applicable, specify if the job is remote, hybrid, or onsite.
             Global identifier label : remote
 
-            Adzuna      : tbd
+            Adzuna      : N/A -> null
             The Muse    : Created upon checking location.name. 0: onsite ; 1: remote; 2: hybrid
             Indeed      : tbd            
+
+            !! creation of a trigger in the DB to update this field depending on presence of hybrid or remote in job_desc.
+            !! If none is present -> set to 0
 
     - Salary Range - Min and max salary offered (important for filtering by compensation).
             Global identifier label : sal_min & sal_max & sal

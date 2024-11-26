@@ -3,11 +3,11 @@ import requests
 #list of countries to search in
 countries=['us','de','fr','ca','gb','ch']
 # x sets the number of pages which will be scraped. Page number is a mandatory parameter on Adzuna
-x = 10
+x = 50
 pages = list(range(1, x + 1))
 print(pages)
 # job categories to search in
-categories = ['engineering-jobs','it-jobs']
+categories = ['engineering-jobs','it-jobs','consultancy-jobs','teaching-jobs']
 
 with open("results_adzuna.json", "a") as file:
     for country in countries:

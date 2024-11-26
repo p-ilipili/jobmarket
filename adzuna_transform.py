@@ -12,32 +12,34 @@ translator = Translator()
 # Run shell command in Python to use jq
 # The source file is defined at the end of this command
 result = subprocess.run(
-    ["jq",
-     """.. | objects | select(.results) | .results[] | {
-        job_id : .id,
-        job_date : .created,
-        category : (.category.label | gsub(" Jobs$"; "")),
-        job_title : .title,
-        job_level : (.level //null),
-        company : .company.display_name,
-        job_url : .redirect_url,
-        contract_type : .contract_type,
-        location : (if .location.area then .location.area 
-                | gsub("Deutschland"; "Germany")
-                | gsub("Schweiz"; "Switzerland")
-                | gsub("Kanton "; "")
-                else .location.area end),
-        sal_min : .salary_min,
-        sal_max : .salary_max,
-        sal : (.salary //null),
-        sal_predicted : .salary_is_predicted}""",
-     "results_adzuna.json"],
+    [
+        "jq",
+        """.. | objects | select(has("results")) | .results[] | {
+            job_id: .id,
+            job_date: .created,
+            category: (.category.label | gsub(" Jobs$"; "")),
+            job_title: .title,
+            job_level: (.level // null),
+            company: .company.display_name,
+            job_url: .redirect_url,
+            contract_type: .contract_time,
+            location: (if .location.area then .location.area
+                       | map(gsub("Deutschland"; "Germany") | gsub("Schweiz"; "Switzerland") | gsub("Kanton "; ""))
+                       else .location.area end),
+            sal_min: .salary_min,
+            sal_max: .salary_max,
+            sal: (.salary // null),
+            sal_predicted: .salary_is_predicted
+        }""",
+        "results_adzuna.json"
+    ],
     capture_output=True,
     text=True,
 )
 # Test for checking data structure integrity
 # Print the output
-# print(result.stdout)
+print("test")
+print(result.stdout)
 
 # the obtained data is not an array and has no comma between the elements '}{'}'
 # this is adding the required elements
@@ -65,6 +67,7 @@ for job in adz_jobs:
         j_desc = j_desc_html.get_text(separator="\n", strip=True) if j_desc_html else "Description not found"
         
         job['job_desc'] = j_desc
+        job['remote'] = 0
               
     except requests.RequestException as e:
         job['job_desc'] = f"Error fetching description: {e}"

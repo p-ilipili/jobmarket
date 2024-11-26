@@ -3,7 +3,7 @@ import requests
 #list of countries to search in
 #countries=['us','fr','de','gb']
 # x sets the number of pages which will be scraped. Page number is a mandatory parameter on Adzuna
-x = 2
+x = 500
 pages = list(range(1, x + 1))
 print(pages)
 # job categories to search in
