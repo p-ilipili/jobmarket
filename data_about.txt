@@ -7,28 +7,28 @@ Sources :
 Attributes : (this list needs to be cleaned up, or other attributes may be added)
 
     - Job ID from source - Used for not inserting same data twice
-        Global identifier label : job_id
+        Global identifier label : job_id - NOT NULL - Primary Key
         
             Adzuna      : .id
             The Muse    : .id
             Indeed      : tbd
         
     - Job Title - Specific role or position.
-        Global identifier label : job_title
+        Global identifier label : job_title - varchar2(50)
 
             Adzuna      : .title
             The Muse    : .name
             Indeed      : tbd
 
     - Job Description - Full details about job responsibilities and requirements.
-        Global identifier label : job_desc
+        Global identifier label : job_desc - varchar2(100)
 
             Adzuna      : Get description from .redirect_url with BeautifulSoup
             The Muse    : Get description from .refs.landing_page with BeautifulSoup
             Indeed      : tbd
 
     - Category - Industry or field of the job (e.g., IT, Finance, Healthcare).
-        Global identifier label : category
+        Global identifier label : category - varchar2(50)
         # Q: only one category per job?
         # Q: the industry is different from the category -> IT technician in Finance or in Healthcare is different
         # -> different skillsets would be needed
@@ -53,14 +53,14 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             Indeed      : tbd
 
     - Company Name - Name of the hiring company.
-        Global identifier label : company_name
+        Global identifier label : company_name - varchar2(30)
 
             Adzuna      : .company.display_name
             The Muse    : .company.name
             Indeed      : tbd
     
     - Contract Type - Employment type (e.g., full-time, part-time, contract).
-            Global identifier label : contract_type
+            Global identifier label : contract_type - varchar2(50)
 
             Adzuna      : .contract_type
             The Muse    : tbd
@@ -68,7 +68,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
     
     - Location - City, state, and country details; essential for filtering by geography.
             # Country and city only? - this data should be available on all sources. Region?
-            Global identifier label : location
+            Global identifier label : location - variable list of values ['Country','area/state/...','district','city','city2',...]
 
             Adzuna      : .location.area
             The Muse    : .locations[].name
@@ -86,7 +86,7 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             !! If none is present -> set to 0
 
     - Salary Range - Min and max salary offered (important for filtering by compensation).
-            Global identifier label : sal_min & sal_max & sal
+            Global identifier label : sal_min & sal_max & sal - varchar2 with number and currency 
 
             Adzuna      : .salary_max, .salary_min, sal = null
             The Muse    : N/A
@@ -100,14 +100,14 @@ Attributes : (this list needs to be cleaned up, or other attributes may be added
             Indeed      : tbd
 
     - Creation Date - Date the job was posted, for relevance filtering.
-            Global identifier label : job_date  (other propositions?)
+            Global identifier label : job_date - Date
 
             Adzuna      : .created
             The Muse    : .publication_date
             Indeed      : tbd
 
     - Level - Senior, Mid, Junior, ... ? 
-            Global identifier label : job_level  (other propositions?)
+            Global identifier label : job_level - varchar2 (20)
 
             Adzuna      : N/A
             The Muse    : .levels[].short_name
