@@ -1,0 +1,115 @@
+Sources :
+
+    - https://api.adzuna.com/v1/api/jobs
+    - https://www.themuse.com/api/public/jobs
+
+
+Attributes : (this list needs to be cleaned up, or other attributes may be added)
+
+    - Job ID from source - Used for not inserting same data twice
+        Global identifier label : job_id - NOT NULL - Primary Key
+        
+            Adzuna      : .id
+            The Muse    : .id
+            Indeed      : tbd
+        
+    - Job Title - Specific role or position.
+        Global identifier label : job_title - varchar2(50)
+
+            Adzuna      : .title
+            The Muse    : .name
+            Indeed      : tbd
+
+    - Job Description - Full details about job responsibilities and requirements.
+        Global identifier label : job_desc - varchar2(100)
+
+            Adzuna      : Get description from .redirect_url with BeautifulSoup
+            The Muse    : Get description from .refs.landing_page with BeautifulSoup
+            Indeed      : tbd
+
+    - Category - Industry or field of the job (e.g., IT, Finance, Healthcare).
+        Global identifier label : category - varchar2(50)
+        # Q: only one category per job?
+        # Q: the industry is different from the category -> IT technician in Finance or in Healthcare is different
+        # -> different skillsets would be needed
+
+            Adzuna      : .category.label
+            The Muse    : .categories[].name
+            Indeed      : tbd
+
+    - Skills/Requirements - Specific skills or technologies needed.
+        Global identifier label : skill_name [list]
+
+        # We may need a separate table with the skills, in the job document, we'll have a list of skills with skill_ids
+        # or we can list the skills directly.  I don't know what is better?
+        # in a relational DB, we need another table with job_id and skill_id as primary keys
+        #
+        # How do we extract skills? One way would be to have a file full of words related to skills. 
+        # This could be like a 1000 words or more. 
+        # And then check in the description if those words are present.  To discuss with Antoine.
+
+            Adzuna      : tbd
+            The Muse    : tbd
+            Indeed      : tbd
+
+    - Company Name - Name of the hiring company.
+        Global identifier label : company_name - varchar2(30)
+
+            Adzuna      : .company.display_name
+            The Muse    : .company.name
+            Indeed      : tbd
+    
+    - Contract Type - Employment type (e.g., full-time, part-time, contract).
+            Global identifier label : contract_type - varchar2(50)
+
+            Adzuna      : .contract_type
+            The Muse    : tbd
+            Indeed      : tbd
+    
+    - Location - City, state, and country details; essential for filtering by geography.
+            # Country and city only? - this data should be available on all sources. Region?
+            Global identifier label : location - variable list of values ['Country','area/state/...','district','city','city2',...]
+
+            Adzuna      : .location.area
+            The Muse    : .locations[].name
+            Indeed      : tbd
+
+
+    - Remote/Hybrid - If applicable, specify if the job is remote, hybrid, or onsite.
+            Global identifier label : remote   list of values  [0,1,2] or [onsite,remote,hybrid]
+
+            Adzuna      : N/A -> null
+            The Muse    : Created upon checking location.name. 0: onsite ; 1: remote; 2: hybrid
+            Indeed      : tbd            
+
+            !! creation of a trigger in the DB to update this field depending on presence of hybrid or remote in job_desc.
+            !! If none is present -> set to 0
+
+    - Salary Range - Min and max salary offered (important for filtering by compensation).
+            Global identifier label : sal_min & sal_max & sal - varchar2 with number and currency 
+
+            Adzuna      : .salary_max, .salary_min, sal = null
+            The Muse    : N/A
+            Indeed      : tbd
+
+    - Predicted Salary Indicator - Whether the salary is estimated or exact.
+        Global identifier label : sal_predicted (boolean)
+
+            Adzuna      : .salary_is_predicted
+            The Muse    : N/A
+            Indeed      : tbd
+
+    - Creation Date - Date the job was posted, for relevance filtering.
+            Global identifier label : job_date - Date
+
+            Adzuna      : .created
+            The Muse    : .publication_date
+            Indeed      : tbd
+
+    - Level - Senior, Mid, Junior, ... ? 
+            Global identifier label : job_level - varchar2 (20)
+
+            Adzuna      : N/A
+            The Muse    : .levels[].short_name
+            Indeed      : tbd
+

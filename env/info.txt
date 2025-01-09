@@ -1,0 +1,20 @@
+
+=============  ADZUNA  =============
+Application ID
+This is the application ID, you should send with each API request.
+
+f169c798
+--
+Application Keys
+These are application keys used to authenticate requests.
+
+147df6984dbd7157b904268ae8b7dee0
+
+
+============  THE MUSE  ============
+#Label	    API key	 
+#jobmarket	36eaeeeaba91d6ee04b30655f063a317caf2a722544b1da406e08e00e1383628
+
+
+Label	    API key	 
+jobmarket	2c157d8aa46d604b5d390698698525ea8831dd96f1d8e7c1b7d15d19ce6eb608
