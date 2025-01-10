@@ -1,3 +1,9 @@
+// Create the database (if it doesn't exist)
+//CREATE DATABASE neo4j_jmdb;
+
+// Switch to the newly created database
+//:use neo4j_jmdb
+
 //Import ESCO using CSV files
 create index ON :Occupation(ISCOGroup);
 create index ON :Occupation(altLabels);

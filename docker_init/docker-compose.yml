@@ -1,7 +1,44 @@
-version: "2.2"
+jm_neo4j:
+    image: neo4j:5.26-community-bullseye
+    container_name: jm_neo4j
+    environment:
+      - NEO4J_AUTH=neo4j/neo4jpwd  # Set the username and password for Neo4j
+      #- NEO4J_AUTH=none
+    volumes:
+      - logs:/var/log/neo4j
+      - ../docker_vol/data_db/neo4j/csv:/var/lib/neo4j/import  # Mount the 'csv' folder to the Neo4j import directory
+      - ../docker_vol/data_db/neo4j/dbfiles:/var/lib/neo4j/data  # Mount the database folder (optional, if you want to persist Neo4j data)
+      - ../docker_vol/data_db/neo4j/script:/var/lib/neo4j/script  # Mount the folder containing your .cql script (optional)
+    ports:
+      - "7474:7474"  # HTTP port for Neo4j browser
+      - "7687:7687"  # Bolt protocol port for client connections
+    command: >
+      bash -c '
+        # Check if the setup has been done before by looking for the .setup_done flag file
+        if [ ! -f /var/lib/neo4j/import/.setup_done ]; then
+          echo "Setting initial password...";
+          neo4j-admin dbms set-initial-password neo4jpwd &&
+          echo "Initial password set to neo4jpwd";
+          
+          # Run the import script to create the database and load data
+          cypher-shell -u neo4j -p neo4jpwd -f /var/lib/neo4j/script/import_ESCO_csv_en.cql &&
+          echo "Data imported successfully";
+          
+          # Create the .setup_done flag to mark that the setup is complete
+          touch /var/lib/neo4j/import/.setup_done;
+          
+        else
+          echo "Setup already completed. Starting server...";
+        fi;
+        
+        # Start Neo4j server
+        /var/lib/neo4j/bin/neo4j console
+      '
+    networks:
+      - jm_network
 
 services:
-  setup:
+setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
@@ -49,7 +86,7 @@ services:
       interval: 1s
       timeout: 5s
       retries: 120
-
+  # Elasticsearch database
   es01:
     depends_on:
       setup:
@@ -57,14 +94,15 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
-      - esdata01:/usr/share/elasticsearch/data
-      - working_dir:/app/data
+      - logs:/var/log/elasticsearch
+      - ../docker_vol/elastic/dbfiles:/usr/share/elasticsearch/data
+      - ../docker_vol/data_ETL:/app/data_ETL
+    networks:
+      - jm_network
     ports:
       - ${ES_PORT}:9200
     environment:
       - node.name=es01
-      - cluster.name=${CLUSTER_NAME}
-      - cluster.initial_master_nodes=es01
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
@@ -93,7 +131,14 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-
+    command: >
+      bash -c '
+        echo "Waiting for Elasticsearch to start";
+        sleep 10;
+        echo "Importing data into Elasticsearch";
+        curl -X POST "http://es01:9200/_bulk" -H "Content-Type: application/json" --data-binary @/app/data_ETL/adz_jobs.csv;
+        curl -X POST "http://es01:9200/_bulk" -H "Content-Type: application/json" --data-binary @/app/data_ETL/muse_jobs.csv;
+      '
   kibana:
     depends_on:
       es01:
@@ -102,6 +147,8 @@ services:
     volumes:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
+    networks:
+      - jm_network
     ports:
       - ${KIBANA_PORT}:5601
     environment:
@@ -121,12 +168,18 @@ services:
       timeout: 10s
       retries: 120
 
+networks:
+  jm_network:
+    driver: bridge
+
 volumes:
   certs:
     driver: local
-  esdata01:
-    driver: local
   kibanadata:
     driver: local
-  working_dir:
-    external: true
+  logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../docker_vol/log
