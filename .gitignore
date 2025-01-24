@@ -2,16 +2,23 @@
 #*.log
 
 # Exclude a specific folder
+backup/
 scripts-tests/
+docker_vol/data_db/elastic/dbfiles/_state/
+docker_vol/data_db/elastic/dbfiles/indices/
+docker_vol/data_db/elastic/dbfiles/snapshot_cache/
+docker_vol/data_db/neo4j/dbfiles/
 
-# Exclude a specific file
-#config.json
+# Exclude airflow docker-compose file
+docker_init/airflow/*
+!docker_init/airflow/docker-compose.yaml
 
 # Exclude all .env files
 #*.env
 
-# Exclude .doc files
+# Exclude files
 *.docx
+docker_vol/data_db/elastic/dbfiles/node*
 
 # Exclude .DS_Store files
 .DS_Store

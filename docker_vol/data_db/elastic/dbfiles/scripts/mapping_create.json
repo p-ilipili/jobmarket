@@ -1,0 +1,128 @@
+PUT /jobmarket
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "analysis": {
+      "tokenizer": {
+        "edge_ngram_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 4,
+          "max_gram": 25,
+          "token_chars": ["letter", "digit"]
+        }
+      },
+      "analyzer": {
+        "edge_ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "edge_ngram_tokenizer",
+          "filter": ["lowercase"]
+        }
+      },
+      "normalizer": {
+        "custom_normalizer": {
+          "type": "custom",
+          "char_filter": [],
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "job_id": {
+        "type": "unsigned_long",
+        "index": true
+      },
+      "job_date": {
+        "type": "date"
+      },
+      "category": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "job_title": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "job_level": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "company": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "job_url": {
+        "type": "text",
+        "index": false
+      },
+      "contract_type": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "location": {
+        "properties": {
+          "country": {
+            "type": "keyword"
+          },
+          "region_city": {
+            "type": "keyword"
+          }
+        }
+      },
+      "sal_min": {
+        "type": "float"
+      },
+      "sal_max": {
+        "type": "float"
+      },
+      "sal": {
+        "type": "float"
+      },
+      "sal_predicted": {
+        "type": "boolean"
+      },
+      "job_desc": {
+        "type": "text",
+        "analyzer": "edge_ngram_analyzer"
+      },
+      "remote": {
+        "properties": {
+          "r_numeric": {
+            "type": "byte"
+          },
+          "r_text": {
+            "type": "keyword"
+          }
+        }
+      },
+      "skills": {
+        "type": "keyword"
+      }
+    }
+  }
+}
+

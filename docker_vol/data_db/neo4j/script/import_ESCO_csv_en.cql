@@ -5,64 +5,67 @@
 //:use neo4j_jmdb
 
 //Import ESCO using CSV files
-create index ON :Occupation(ISCOGroup);
-create index ON :Occupation(altLabels);
-create index ON :Skill(altLabels);
-create index ON :ISCOGroup(code);
-create index ON :Skill(conceptUri);
-create index ON :ISCOGroup(conceptUri);
-create index ON :Occupation(conceptUri);
-create index ON :Occupation(preferredLabel);
-create index ON :Skill(preferredLabel);
+CREATE INDEX FOR (o:Occupation) ON (o.ISCOGroup);
+CREATE INDEX FOR (o:Occupation) ON (o.altLabels);
+CREATE INDEX FOR (s:Skill) ON (s.altLabels);
+CREATE INDEX FOR (i:ISCOGroup) ON (i.code);
+CREATE INDEX FOR (s:Skill) ON (s.conceptUri);
+CREATE INDEX FOR (i:ISCOGroup) ON (i.conceptUri);
+CREATE INDEX FOR (o:Occupation) ON (o.conceptUri);
+CREATE INDEX FOR (o:Occupation) ON (o.preferredLabel);
+CREATE INDEX FOR (s:Skill) ON (s.preferredLabel);
 
-//import skills and skillgroups
-//skillgroups are also skills
-load csv with headers from "file:///skillGroups_en.csv" as row
-create (s:Skill:Skillgroup)
-set s = row;
-//skills
-load csv with headers from "file:///skills_en.csv" as row
-create (s:Skill)
-set s = row;
-//add the BROADER_THAN relationship between different skills
-load csv with headers from "file:///broaderRelationsSkillPillar.csv" as row
-match (smaller:Skill {conceptUri: row.conceptUri}), (broader:Skill {conceptUri: row.broaderUri})
-create (broader)-[:BROADER_THAN]->(smaller);
+// Import skills and skill groups
+// Skill groups are also skills
+LOAD CSV WITH HEADERS FROM "file:///skillGroups_en.csv" AS row
+CREATE (s:Skill:Skillgroup)
+SET s = row;
 
-//import occupations
-load csv with headers from "file:///occupations_en.csv" as row
-create (o:Occupation)
-set o = row;
+// Skills
+LOAD CSV WITH HEADERS FROM "file:///skills_en.csv" AS row
+CREATE (s:Skill)
+SET s = row;
 
-//import the International Standard Classification for Occupations of the ILO
-load csv with headers from "file:///ISCOGroups_en.csv" as row
-create (isco:ISCOGroup)
-set isco = row;
-//impirt the BROADER_THAN relationships between ISCO groups
-load csv with headers from "file:///broaderRelationsOccPillar.csv" as row
-match (smaller:ISCOGroup {conceptUri: row.conceptUri}), (broader:ISCOGroup {conceptUri: row.broaderUri})
-create (broader)-[:BROADER_THAN]->(smaller);
-//connect the occupations to their ISCOGroup
-match (isco:ISCOGroup), (o:Occupation)
-where isco.code = o.iscoGroup
-create (o)-[:PART_OF_ISCOGROUP]->(isco);
+// Add the BROADER_THAN relationship between different skills
+LOAD CSV WITH HEADERS FROM "file:///broaderRelationsSkillPillar_en.csv" AS row
+MATCH (smaller:Skill {conceptUri: row.conceptUri}), (broader:Skill {conceptUri: row.broaderUri})
+CREATE (broader)-[:BROADER_THAN]->(smaller);
 
-//Connect Skills to Occupations
-using periodic commit 500
-load csv with headers from "file:///occupationSkillRelations.csv" as row
-match (s:Skill {conceptUri: row.skillUri}), (o:Occupation {conceptUri: row.occupationUri})
-CREATE (s)-[:RELATED_TO {type: row.relationType}]->(o);
+// Import occupations
+LOAD CSV WITH HEADERS FROM "file:///occupations_en.csv" AS row
+CREATE (o:Occupation)
+SET o = row;
 
-// match ()-[r:RELATED_TO]->()
-// return distinct r.type;
+// Import the International Standard Classification for Occupations (ISCO) of the ILO
+LOAD CSV WITH HEADERS FROM "file:///ISCOGroups_en.csv" AS row
+CREATE (isco:ISCOGroup)
+SET isco = row;
 
-//differentiate the different types of relations between occupations and skills
-match (a)-[r:RELATED_TO]->(b)
-where r.type = "essential"
-create (a)-[:ESSENTIAL_FOR]->(b);
-match (a)-[r:RELATED_TO]->(b)
-where r.type = "optional"
-create (a)-[:OPTIONAL_FOR]->(b);
-//remove the old relationships
-match (a)-[r:RELATED_TO]->(b)
-delete r;
+// Import the BROADER_THAN relationships between ISCO groups
+LOAD CSV WITH HEADERS FROM "file:///broaderRelationsOccPillar_en.csv" AS row
+MATCH (smaller:ISCOGroup {conceptUri: row.conceptUri}), (broader:ISCOGroup {conceptUri: row.broaderUri})
+CREATE (broader)-[:BROADER_THAN]->(smaller);
+
+// Connect the occupations to their ISCO group
+MATCH (isco:ISCOGroup), (o:Occupation)
+WHERE isco.code = o.iscoGroup
+CREATE (o)-[:PART_OF_ISCOGROUP]->(isco);
+
+// Connect skills to occupations
+    LOAD CSV WITH HEADERS FROM "file:///occupationSkillRelations_en.csv" AS row
+    MATCH (s:Skill {conceptUri: row.skillUri}), (o:Occupation {conceptUri: row.occupationUri})
+    CREATE (s)-[:RELATED_TO {type: row.relationType}]->(o)
+    RETURN null AS placeholder
+
+// Differentiate the different types of relations between occupations and skills
+MATCH (a)-[r:RELATED_TO]->(b)
+WHERE r.type = "essential"
+CREATE (a)-[:ESSENTIAL_FOR]->(b);
+
+MATCH (a)-[r:RELATED_TO]->(b)
+WHERE r.type = "optional"
+CREATE (a)-[:OPTIONAL_FOR]->(b);
+
+// Remove the old relationships
+MATCH (a)-[r:RELATED_TO]->(b)
+DELETE r;
