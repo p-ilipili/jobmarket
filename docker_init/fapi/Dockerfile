@@ -1,11 +1,14 @@
-FROM python:3.9
+FROM python:3.12
 
 WORKDIR /
 
-ADD src/requirements.txt ./
-ADD src/main.py ./app
+COPY src/requirements.txt /
 
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN mkdir -p /app
+COPY src/main.py /app
+COPY src/__init__.py /app
+
+RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
 
 EXPOSE 8888
 

@@ -1,0 +1,4 @@
+Airflow may need permissions on the folder. 
+Modify the attributes of the folder with the corresponding airflow UID: : 
+
+xattr -w com.docker.grpcfuse.ownership '{"UID":501,"GID":0,"mode":10000}' scripts_ETL

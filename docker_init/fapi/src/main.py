@@ -12,10 +12,10 @@ import matplotlib
 matplotlib.use("Agg")
 
 # Neo4j and Elasticsearch configuration
-NEO4J_URI = "bolt://localhost:7687"
+NEO4J_URI = "bolt://jm_neo4j:7687"
 NEO4J_USER = "neo4j"
 NEO4J_PASSWORD = "neo4jpwd"
-ELASTICSEARCH_HOST = "http://localhost:9200"
+ELASTICSEARCH_HOST = "http://jm-elastic:9200"
 
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 es = Elasticsearch(ELASTICSEARCH_HOST)

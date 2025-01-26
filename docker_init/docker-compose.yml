@@ -1,4 +1,13 @@
 services:
+# Fast API
+  fastapi:
+    image: ilipili/jobmarket-fapi:latest
+    container_name: jm-fapi
+    ports:
+      - "8888:8888"
+    networks:
+      - jm_network
+# Neo4j database 
   jm_neo4j:
     image: neo4j:5.26-community-bullseye
     container_name: jm_neo4j
