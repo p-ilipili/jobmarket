@@ -3,13 +3,14 @@ import json
 from elasticsearch import Elasticsearch
 
 # Elasticsearch connection setup
-es = Elasticsearch("http://@localhost:9200")
+es = Elasticsearch("http://@jm-elastic:9200")
 
 # Define the index name
 index_name = "jobmarket"
 
 # CSV file processing
-csv_files = ["adz_jobs.csv", "muse_jobs.csv"]
+csv_files = ["/opt/airflow/scripts_ETL/adz_jobs.csv"]
+#csv_files = ["adz_jobs.csv", "muse_jobs.csv"]
 
 def process_location(location):
     """Splits the location into country and region/city."""

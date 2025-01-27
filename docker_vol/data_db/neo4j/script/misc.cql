@@ -13,6 +13,7 @@ MATCH (n:Skill)
 WHERE n.preferredLabel CONTAINS 'SQL'
 RETURN n;
 
+// skillgroup containing xxxx
 MATCH (n:Skillgroup)
 WHERE n.preferredLabel CONTAINS 'data'
 MATCH (c)-[relation]-(n)

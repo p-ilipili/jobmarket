@@ -23,7 +23,7 @@ if os.path.exists(file_name):
     backup_file = f"adz_jobs_{creation_date}.csv"
     backup_path = os.path.join(backup_folder, backup_file)
     shutil.move(file_name, backup_path)
-    print(f"Moved {file_name} to {backup_path}")
+    #print(f"Moved {file_name} to {backup_path}")
 
 # Initialize google_trans_lzx translator
 translator = Translator()

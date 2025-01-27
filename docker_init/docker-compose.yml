@@ -79,7 +79,7 @@ services:
 
 networks:
   jm_network:
-    driver: bridge
+    external: true
 
 volumes:
   kibanadata:

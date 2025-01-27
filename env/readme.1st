@@ -1,0 +1,18 @@
+1.  Make sure you have the same context for everything to assure all components are in the same environment.  
+    If you have an error on the network when starting up the containers, do the following : 
+    # docker context show
+    # docker context use default (or the one of your choice)
+
+    # docker network ls
+    # remove jm_network if it exists
+
+    # run the /docker_init/docker-network-sh to recreate it
+
+2.  Use your user ID as the airflow user ID (to execute in the airflow folder):
+    # echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
+
+3.  Airflow may need permissions on the folder scripts folder. 
+    Modify the attributes of the folder with the corresponding airflow UID: : 
+
+    # xattr -w com.docker.grpcfuse.ownership '{"UID":501,"GID":0,"mode":10000}' scripts_ETL
+
