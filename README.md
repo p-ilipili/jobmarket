@@ -4,7 +4,7 @@ DataScientest - Data Engineering jobmarket project
 ## 1	Data Extraction
 Both scripts, adzuna_extract.py and muse_extract.py, are designed to scrape job offers from two platforms—Adzuna and The Muse. Here's a high-level summary of what they do:
 
-1.1	Scripts Mechanisms
+## 1.1	Scripts Mechanisms
 adzuna_extract.py
 1.	Scope:
 o	Scrapes job offers from Adzuna for specified countries (us, de, fr, ca, gb, ch).
@@ -30,24 +30,31 @@ There were attempts to scrape those sites. While they initially succeeded with u
 
 The transformation process is responsible for cleaning, standardizing, and enriching the raw job offer data extracted from Adzuna and The Muse. This step ensures that the data is structured and usable for downstream analysis.
 
-2.1 Initial Processing
+## 2.1 Initial Processing
+
 This step involves extracting relevant job attributes from raw JSON data, handling backups, and preparing the dataset for deeper transformations.
 
-Backup Management: If an existing transformed file is found (adz_jobs.csv or muse_jobs.csv), it is archived in the old/ folder, preserving historical data.
-Data Extraction & Parsing:
+<ins>Backup Management:</ins><br>
+If an existing transformed file is found (adz_jobs.csv or muse_jobs.csv), it is archived in the old/ folder, preserving historical data.
+
+<ins>Data Extraction & Parsing:</ins><br>
 Uses jq (for Adzuna) to extract relevant job attributes (title, company, location, description, salary, etc.).
 Loads raw JSON data (for The Muse) into a Pandas DataFrame, converting it into a structured tabular format.
-2.2 Standardization and Enrichment
+
+## 2.2 Standardization and Enrichment
+
 After extraction, the data undergoes multiple cleaning and enrichment steps:
 
-Translation & Language Detection:
+<ins>Translation & Language Detection:</ins> <br>
 Detects the language of job descriptions using langdetect.
 Uses googletrans to translate non-English descriptions into English for uniformity.
-Location Standardization:
+
+<ins>Location Standardization:</ins><br>
 Extracts and structures city, state, and country fields.
 Replaces U.S. state abbreviations with full names.
 Identifies remote jobs based on specific keywords and flags them.
-Data Cleaning:
+
+<ins>Data Cleaning:</ins><br>
 Removes incomplete or irrelevant job postings.
 Handles missing values and ensures consistent formatting.
 Output Storage: Saves the cleaned, structured job dataset as a Pandas DataFrame, which is then exported as adz_jobs.csv and muse_jobs.csv.
