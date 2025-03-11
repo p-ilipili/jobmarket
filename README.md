@@ -129,3 +129,77 @@ Maps remote values (0, 1, 2) to text labels (onsite, hybrid, remote).
 Each job posting is converted into a structured JSON document.
 The script bulk-inserts job data into the jobmarket index.
 This ensures that job postings are searchable in real-time, with support for full-text search, filtering, and autocomplete.
+
+## 4 Adding Skills to Job Descriptions in Elasticsearch
+In this step, job descriptions stored in Elasticsearch are enriched with skills extracted from Neo4j. This process allows for better searchability and skill-based recommendations when users query job listings.
+
+## 4.1 Connecting to Databases
+The script skills_add.py connects to both Neo4j and Elasticsearch to retrieve skills and match them to job descriptions.
+
+Elasticsearch Connection:
+
+Uses the Elasticsearch Python client to connect to an Elasticsearch instance at:
+``` ES_HOST = "http://@localhost:9200" ```
+
+The job postings are stored in the jobmarket index.
+Neo4j Connection:
+
+Uses the neo4j Python driver to connect to Neo4j via:
+``` NEO4J_URI = "bolt://localhost:7687" ```
+
+Authentication is handled with:
+``` NEO4J_USER = "neo4j" NEO4J_PASSWORD = "neo4jpwd" ```
+
+Note: The password could have been encrypted using base64 encoding for better security. However, since this project was initially designed to be completed by two people and I had to work on it alone, I was short on time. Even though configuring encryption doesn’t take long, I encountered various other issues that took up a significant amount of time, so I left the password in plaintext for simplicity.
+
+## 4.2 Extracting Skills from Neo4j
+The script runs the following Cypher query to extract skills:
+
+``` MATCH (n) WHERE n:Skill OR n:Skillset RETURN n.preferredLabel AS preferredLabel, n.altLabels AS altLabels, n.hiddenLabels AS hiddenLabels ```
+
+Skills are extracted from three fields:
+
+preferredLabel: The main skill name.
+altLabels: Alternative names for the skill.
+hiddenLabels: Other variations or synonyms.
+Processing Skills:
+
+Skills are lowercased for standardization.
+All variations of a skill (alternative labels, hidden labels) are added to a set to ensure uniqueness.
+
+## 4.3 Matching Skills to Job Descriptions
+Once skills are extracted, the script iterates over job postings in Elasticsearch and scans the job_desc field for matching skills.
+
+<ins>Skill Matching Process:</ins><br>
+Retrieve job descriptions from Elasticsearch:<br>
+``` results = es.search(index=ELASTIC_INDEX, body=query, scroll="2m", size=1000) ```
+
+A scroll API is used to efficiently retrieve large sets of job data.
+Batch processing is done in chunks of 1,000 job descriptions.
+Check if each skill exists in the job description:<br>
+``` for skill in skills: if re.search(rf"\b{re.escape(skill)}\b", job_desc, re.IGNORECASE): matched_skills.add(skill) ```
+
+Regex (re.search) ensures skills are matched as whole words.
+Skills are case-insensitive to ensure comprehensive matching.
+Update the job posting with matched skills:<br>
+``` es.update(index=ELASTIC_INDEX, id=job_id, body={"doc": {"skills": list(matched_skills)}}) ```
+
+The matched skills are stored in the skills field for fast filtering in Elasticsearch.
+
+## 4.4 Logging and Monitoring
+The script logs progress and errors into a log file:
+
+```
+LOG_FILE = "../../../../log/skills.log"
+```
+
+Any issues with database connections, API calls, or processing errors are recorded for debugging.
+
+## 4.5 Outcome: Skill-Enhanced Job Search
+By enriching job descriptions with relevant skills, this process allows for:
+
+Better searchability: Users can filter jobs based on skills.
+Improved recommendations: Jobs are recommended based on skill matching.
+Efficient analytics: Employers can analyze skill trends in job postings.
+With this step complete, the job postings in Elasticsearch are fully indexed with relevant skills extracted from Neo4j, creating a comprehensive job-matching system.
+
