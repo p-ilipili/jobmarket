@@ -28,3 +28,26 @@ There were attempts to scrape those sites. While they initially succeeded with u
 
 ## 2	Data Trasformation
 
+The transformation process is responsible for cleaning, standardizing, and enriching the raw job offer data extracted from Adzuna and The Muse. This step ensures that the data is structured and usable for downstream analysis.
+
+2.1 Initial Processing
+This step involves extracting relevant job attributes from raw JSON data, handling backups, and preparing the dataset for deeper transformations.
+
+Backup Management: If an existing transformed file is found (adz_jobs.csv or muse_jobs.csv), it is archived in the old/ folder, preserving historical data.
+Data Extraction & Parsing:
+Uses jq (for Adzuna) to extract relevant job attributes (title, company, location, description, salary, etc.).
+Loads raw JSON data (for The Muse) into a Pandas DataFrame, converting it into a structured tabular format.
+2.2 Standardization and Enrichment
+After extraction, the data undergoes multiple cleaning and enrichment steps:
+
+Translation & Language Detection:
+Detects the language of job descriptions using langdetect.
+Uses googletrans to translate non-English descriptions into English for uniformity.
+Location Standardization:
+Extracts and structures city, state, and country fields.
+Replaces U.S. state abbreviations with full names.
+Identifies remote jobs based on specific keywords and flags them.
+Data Cleaning:
+Removes incomplete or irrelevant job postings.
+Handles missing values and ensures consistent formatting.
+Output Storage: Saves the cleaned, structured job dataset as a Pandas DataFrame, which is then exported as adz_jobs.csv and muse_jobs.csv.
