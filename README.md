@@ -1,6 +1,11 @@
 # jobmarket
 DataScientest - Data Engineering jobmarket project
 
+A tool and infrastructure for scraping jobs, organizing them, enriching the data and perform analysis, machine learning and more. 
+
+<ins>Tech stack:</ins> python, jason, beautifulsoup, docker / kubernetes, airflow, neo4j, elasticsearch, matplotlib, ...
+
+
 Data extraction and transformation are tasks done simultaneously (adzuna and muse) and consecutively in Airflow.
 
 ## 1	Data Extraction
